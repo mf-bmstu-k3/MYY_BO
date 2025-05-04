@@ -1,0 +1,81 @@
+m255
+K3
+13
+cModel Technology
+Z0 dD:\AlteraProjects\from_lipova\Projects_MYY_with_BO\New_fifth\Fifth\simulation\qsim
+valu_sm
+Z1 ISBc41TJC3e0;Ofg?]Bk<>2
+Z2 VY1JN@Wc0DO_MFXNf1ZkS?2
+Z3 dD:\AlteraProjects\from_lipova\Projects_MYY_with_BO\Fifth\simulation\qsim
+Z4 w1731575725
+Z5 8Fifth.vo
+Z6 FFifth.vo
+L0 31
+Z7 OV;L;10.1d;51
+r1
+31
+Z8 !s90 -work|work|Fifth.vo|
+Z9 o-work work -O0
+!i10b 1
+Z10 !s100 XT2D4GUgbA:RHWWSZGjDP1
+!s85 0
+Z11 !s108 1731575726.909000
+Z12 !s107 Fifth.vo|
+!s101 -O0
+valu_sm_vlg_check_tst
+!i10b 1
+Z13 !s100 UQzFWdl3BTzI7?K@jRBD73
+Z14 IaYFjUO_>1LhAX95i]FRg^1
+Z15 VHmZ0eZk3Q]Moak0o:[gjK1
+R3
+Z16 w1731575724
+Z17 8test_alu.vwf.vt
+Z18 Ftest_alu.vwf.vt
+L0 65
+R7
+r1
+!s85 0
+31
+Z19 !s108 1731575727.100000
+Z20 !s107 test_alu.vwf.vt|
+Z21 !s90 -work|work|test_alu.vwf.vt|
+!s101 -O0
+R9
+valu_sm_vlg_sample_tst
+!i10b 1
+Z22 !s100 UeJF>9gOAoVMQDfzCXM4A1
+Z23 IHdBPI3zQfeQ@ObF2W[MeF0
+Z24 VGmBC1j:=4l5R=XAGb_7cT0
+R3
+R16
+R17
+R18
+L0 29
+R7
+r1
+!s85 0
+31
+R19
+R20
+R21
+!s101 -O0
+R9
+valu_sm_vlg_vec_tst
+!i10b 1
+Z25 !s100 XFa^SSS^kWf<9`n1b:Snj1
+Z26 IBhCMoRN^m_Le2jYcN@<083
+Z27 VC29HBad@g?[R;Oja0Q1[b2
+R3
+R16
+R17
+R18
+Z28 L0 616
+R7
+r1
+!s85 0
+31
+R19
+R20
+R21
+!s101 -O0
+R9

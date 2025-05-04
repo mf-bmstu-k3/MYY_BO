@@ -1,0 +1,123 @@
+-- Design Name: 
+-- Module Name:    BO - Behavioral 
+-- Project Name: 
+-- Target Devices: 
+-- Tool versions: 
+-- этот модуль содержит поведенческое описание блока операций 
+-- используется параметр n- разрядность операндов
+-- Dependencies: 
+--
+-- Revision: 
+-- Revision 0.01 - File Created 17.10.22
+-- Additional Comments: 
+--
+--
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+
+
+entity BO is
+generic (n:integer:=4);     -- n параметр, задает разрядность операндов
+    Port ( a 			: in  STD_LOGIC_VECTOR (n-1 downto 0);-- первый операнд		
+			  b 			: in  STD_LOGIC_VECTOR (n-1 downto 0);-- второй операнд
+			  y 			: in  STD_LOGIC_VECTOR (10 downto 1);-- управляющие сигналы
+           rr 			: buffer  STD_LOGIC_VECTOR (2*n-1 downto 0);-- результат
+           priznak 	: out  STD_LOGIC_VECTOR (1 downto 0); -- признак результата
+			  f 			: out STD_LOGIC_VECTOR (3 downto 1);-- признак отрицательного нуля, анализируемый разряд множителя, знак множителя
+			  
+           clk 		: in  STD_LOGIC);-- синхросигнал
+end BO;
+
+architecture Behavioral of BO is
+signal RA,RB  	:STD_LOGIC_VECTOR (n-1 downto 0);-- для запоминания а и в
+
+signal d  		:STD_LOGIC_VECTOR (2*n-1 downto 0);-- выход КС1
+signal q  		:STD_LOGIC_VECTOR (2*n-1 downto 0);-- выход КС2
+signal s  		:STD_LOGIC_VECTOR (2*n-1 downto 0);-- выход сумматора
+signal pr  		:STD_LOGIC_VECTOR (1 downto 0)	 ;-- выход КС3
+begin
+pr_RA: process (clk) -- этот процесс описывает логику работы регистра RA
+	begin
+		if clk'event and clk='1' then -- по положительному фронту clk
+			if y(1)='1' then -- если есть разрешение
+			RA<=a; -- выполняется прием первого операнда
+			end if;
+		end if;
+	end process pr_RA;
+	
+pr_RB: process (clk)-- этот процесс описывает логику работы регистра RB
+	begin
+		if clk'event and clk='1' then -- по положительному фронту 
+		 if y(3)='1' then -- если есть разрешение тактирования
+			if y(2)='1' then RB<=b;-- если разрешена загрузка, то прием второго операнда
+			 else RB<=RB(n-1)& RB(n-3 downto 0)&'0'; -- иначе сдвиг влево RB с сохранением знака
+			end if;
+		 end if;
+		end if;
+end process pr_RB;
+
+-- ниже приводится описание КС1, d(2*n-1 downto 0) её выход
+with y(5 downto 4) select
+	d(2*n-1 downto n)<=(others=>RA(n-1)) when "01",-- передаем на суммирование +А если y4=1
+		(others=>not RA(n-1)) when "10",--передаем на суммирование -А, если y5=1
+		(others=>'0') when others; -- ноль в остальных случаях
+with y(5 downto 4) select		
+	d(n-1 downto 0)<=RA when "01",-- передаем на суммирование +А если y4=1
+		not RA when "10",--передаем на суммирование -А, если y5=1
+		(others=>'0') when others; -- ноль в остальных случаях
+		
+-- ниже приводится описание КС2, q(2*n-1 downto 0)её выход 
+q(2*n-1 downto n)<=RR(2*n-1 downto n) when y(9)='1' else -- когда умножение
+			(others=>RB(n-1)); -- когда сложение
+			
+q(n-1 downto 0)<=RR(n-1 downto 0) when y(9)='1' else -- когда умножение 
+			RB; -- когда сложение
+			
+SM: process(d,q) -- этот процесс описывает работу сумматора в обратном коде
+-- к его входам подключены выходы КС1 и КС2
+variable sym:STD_LOGIC_VECTOR (2*n downto 0); -- для вычисления суммы
+begin
+ 
+sym:=('0'&d)+('0'&q);-- сложение
+	if (sym(2*n)='1')then sym(2*n) :='0'; sym :=sym+1;
+   end if;
+
+s <=sym(2*n-1 downto 0);
+end process SM;
+			
+pr_RR: process (clk) -- этот процесс описывает работу регистра результата
+begin
+	if clk'event and clk='1' then	-- по положительному фронту синхросигнала
+		if y(8)='1' then rr<=(others=>'0');   --очистка rr
+		elsif (y(7)='1') then -- если есть разрешение тактирования
+			if y(6)='1' then rr<=s;--загрузка rr
+				else rr<=rr(2*n-2 downto 0)& rr(2*n-1);-- циклический сдвиг влево rr
+			end if;
+		end if;
+	end if;
+end process pr_RR;
+
+-- ниже приводится описание КС3, которая формирует признак результата
+	pr<="00" when rr (n downto 0)=0 else -- результат равен нулю
+		"10" when rr (n downto 0)< 2**(n-1) else -- результат больше 0
+		"11" when rr (n downto 0)< (2**n)+2**(n-1) else -- переполнение
+		"01"; -- результат меньше 0
+
+pr_RPR: process(clk) --этот процесс описывает работу регистра признака
+begin
+	if clk'event and clk='1' then -- по положительному фронту 
+		if y(10)='1' then priznak<=pr; -- запоминаем признак результата
+		end if;
+	end if;
+end process pr_RPR;	
+-- ниже приводится описание логических условий
+f(1)<= RB(n-1);   --знак множителя
+f(2)<= RB(n-2);	--	анализируемый разряд множителя
+f(3)<= '1' when rr (n downto 0)=(2**(n+1))-1 else -- признак отрицательного нуля
+			'0'; -- иначе ноль	
+
+
+end Behavioral;

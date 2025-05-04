@@ -1,0 +1,85 @@
+m255
+K3
+13
+cModel Technology
+Z0 dD:\AlteraProjects\from_lipova\Seventh\simulation\qsim
+vctrl_un_BO
+Z1 !s100 Yk4ZfRAaaGF1>4`QI2GA43
+Z2 I3_dfdhbnnj@>SgBWl8Z>h3
+Z3 V>>2K=2]cfl::UX?GDY_8C3
+Z4 dD:\AlteraProjects\from_lipova\Seventh\simulation\qsim
+Z5 w1700485565
+Z6 8Seventh.vo
+Z7 FSeventh.vo
+L0 31
+Z8 OV;L;10.1d;51
+r1
+31
+Z9 !s90 -work|work|Seventh.vo|
+Z10 o-work work -O0
+Z11 nctrl_un_@b@o
+!i10b 1
+!s85 0
+Z12 !s108 1700485566.759000
+Z13 !s107 Seventh.vo|
+!s101 -O0
+vctrl_un_BO_vlg_check_tst
+!i10b 1
+Z14 !s100 D;gJ:`e@2[9]TMOJj9g:<1
+Z15 I5a218@_40?NVNR9UN_4=D0
+Z16 VK?MeEVb=L_iXUmMj1Cn3[1
+R4
+Z17 w1700485564
+Z18 8test_alu_2op.vwf.vt
+Z19 Ftest_alu_2op.vwf.vt
+L0 67
+R8
+r1
+!s85 0
+31
+Z20 !s108 1700485566.996000
+Z21 !s107 test_alu_2op.vwf.vt|
+Z22 !s90 -work|work|test_alu_2op.vwf.vt|
+!s101 -O0
+R10
+Z23 nctrl_un_@b@o_vlg_check_tst
+vctrl_un_BO_vlg_sample_tst
+!i10b 1
+Z24 !s100 eVXkml@o1Fk_N<@cehYmX3
+Z25 I`EBXoZh1o9eA7@Pg[IAHT0
+Z26 VOi1KR^zZD=EkALS4g4`202
+R4
+R17
+R18
+R19
+L0 29
+R8
+r1
+!s85 0
+31
+R20
+R21
+R22
+!s101 -O0
+R10
+Z27 nctrl_un_@b@o_vlg_sample_tst
+vctrl_un_BO_vlg_vec_tst
+!i10b 1
+Z28 !s100 [9QC>1[SS9O?6_LgIIH5i0
+Z29 I[A:KKE2DMc4:@ahoMf:3>1
+Z30 V8z:S^:1h^JO=foX`nCnmk0
+R4
+R17
+R18
+R19
+Z31 L0 358
+R8
+r1
+!s85 0
+31
+R20
+R21
+R22
+!s101 -O0
+R10
+Z32 nctrl_un_@b@o_vlg_vec_tst

@@ -1,0 +1,112 @@
+-- этот файл содержит описание МУУ в виде автомата МИЛИ, предназначенного для выполнения четырех операций:
+-- умножения а*b, результат формируется в 2n разрядной сетке
+-- сложения а+b, формируется признак результата = нулю, > нуля, < нуля, переполнение
+-- вычитание -а+b, формируется признак результата = нулю, > нуля, < нуля, переполнение 
+-- взятие операнда с противоположным знаком -а, формируется признак результата = нулю, > нуля, < нуля, переполнение
+-- sko формируется после получения результата 
+
+library ieee;
+use ieee.std_logic_1164.all;
+entity control_unit_for_4op is
+generic (n:integer:=4);     -- n параметр, задает разрядность операндов
+	port
+	(
+		clk		 : in	std_logic; -- тактовый сигнал
+		set 		 : in	std_logic; --  сигнал начальной установки
+		cop		 : in	integer range 0 to 3; --  код операции 1-умножение а*b,0 - сложение а+b, 2 - вычитание -а+b, 3 - взятие -а
+		x	 		 : in	std_logic_vector(2 downto 0);-- логические условия,f3,f2,f1
+		sno		 : in	std_logic; -- сигнал начала операции
+		sko	 	 : out	std_logic; -- сигнал конца операции
+		y	 		 : out	std_logic_vector(10 downto 1); -- управляющие сигналы для блока операций
+		-- следующие сигналы добавлены для отладки
+		incr_i	 : buffer std_logic; -- разрешение инкремента i
+		s_out		 : out   integer range 0 to 3; --  отладочный выход для наблюдения состояний
+		next_state_out : out   integer range 0 to 3 --  отладочный выход для наблюдения состояний
+	);
+
+end entity;
+
+architecture rtl of control_unit_for_4op is
+
+	type state_type is (s0, s1, s2, s3); -- определяем состояния МУУ
+
+	signal next_state, state : state_type; -- следующее состояние, текущее состояние
+	signal i : integer range 1 to n-1 ; -- счетчик анализируемых разрядов множителя
+
+begin
+
+TS: process (clk,set) -- этот процесс определяет текущее состояние МУУ
+	 begin
+		if set = '1' then
+			state <= s0;
+		elsif (rising_edge(clk)) then -- по положительному фронту переключаются состояния
+			state <= next_state;			
+		end if;
+	 end process;
+	 
+NS: process (state,sno,x,i) -- этот процесс определяет следующее состояние МУУ, управляющие сигналы для БО
+	 begin
+
+			case state is
+				when s0=> -- переходы из s0
+				 
+					if (sno = '1') then
+						next_state <= s1; y<="0011000111"; -- если есть сигнал начала операции
+					else
+						next_state <= s0; y<="0000000000"; -- иначе состояние не меняется
+					end if;
+				when s1=>
+				   
+					next_state <= s2; -- из s1 всегда переходим в s2
+					if  cop=0 then	-- если сложение
+						y<="0001101000"; --RR=RA+RB
+					elsif cop=2 then -- если -а+b
+						y<="0001110000"; --RR=-RA+RB
+					elsif cop=3 or x(1 downto 0)="01" then
+						y<="0101110000"; -- RR=RR -RA
+					elsif x(1 downto 0) = "10"  then
+						y<="0101101000"; -- RR=RR +RA  													
+	--				elsif x(1 downto 0)="01" then
+	--					y<="0101110000"; -- RR=RR -RA
+					else 
+						y<="0101100000"; -- RR=RR+0 
+					end if;
+				when s2=>
+					if i = n-1 then
+						next_state <= s0; y<="0000000000"; 	-- формируем сигнал конца операции
+					elsif cop=1 then 								-- если умножение
+						next_state <= s1; y<="0001000100";  -- иначе сдвиг RR, сдвиг RB
+					elsif cop/=1 and x(2)='0' then			-- если не умножение и нет отрицательного нуля
+					   next_state <= s0; y<="1000000000";  -- иначе запись признака в RPR
+					else
+						next_state <= s3; y<="0011000000";  -- иначе если не умножение и есть отрицательный ноль, то обнуляем RR
+					end if;
+				when s3 =>
+						next_state <= s0; y<="1000000000";  -- иначе запись признака в RPR
+				
+			end case;			
+	end process;
+	
+	sko<='1' when (state=s2 and (i=n-1 or (cop/=1 and x(2)='0'))) or state =s3 else -- формирование sko
+			'0';
+	incr_i<='1' when state=s2 and cop=1 and i/=n-1 else --инкремент i, если умножение и не все разряды проверили
+			'0';
+count_i:   process (sno, clk) -- этот процесс определяет поведение счетчика i
+	
+	begin
+		if (sno='1') then i<=1; --устанавливаем в начальное состояние
+		elsif clk'event and clk='1' then 
+		  if (incr_i='1') then i<=i+1; -- инкремент счетчика
+		  end if;
+		 end if;
+	end process;
+	s_out<=0 when state=s0 else
+			 1 when state=s1 else					
+			 2 when state=s2 else
+			 3;
+	next_state_out<=0 when next_state=s0 else
+			 1 when next_state=s1 else					
+			 2 when next_state=s2 else
+			 3;
+
+end rtl;

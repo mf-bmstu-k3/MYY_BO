@@ -1,0 +1,59 @@
+# do Fifth.do 
+# ** Warning: (vlib-34) Library already exists at "work".
+# 
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module alu_sm
+# 
+# Top level modules:
+# 	alu_sm
+# Model Technology ModelSim ALTERA vlog 10.1d Compiler 2012.11 Nov  2 2012
+# -- Compiling module alu_sm_vlg_sample_tst
+# -- Compiling module alu_sm_vlg_check_tst
+# ** Warning: test_alu.vwf.vt(289): (vlog-2576) [BSOB] - Bit-select into 'f_expected_prev' is out of bounds.
+# 
+# ** Warning: test_alu.vwf.vt(289): (vlog-2576) [BSOB] - Bit-select into 'f_prev' is out of bounds.
+# 
+# ** Warning: test_alu.vwf.vt(289): (vlog-2576) [BSOB] - Bit-select into 'f_expected_prev' is out of bounds.
+# 
+# ** Warning: test_alu.vwf.vt(290): (vlog-2576) [BSOB] - Bit-select into 'f_expected_prev' is out of bounds.
+# 
+# ** Warning: test_alu.vwf.vt(290): (vlog-2576) [BSOB] - Bit-select into 'last_f_exp' is out of bounds.
+# 
+# ** Warning: test_alu.vwf.vt(299): (vlog-2576) [BSOB] - Bit-select into 'last_f_exp' is out of bounds.
+# 
+# ** Warning: test_alu.vwf.vt(299): (vlog-2576) [BSOB] - Bit-select into 'f_expected_prev' is out of bounds.
+# 
+# ** Warning: test_alu.vwf.vt(471): (vlog-2576) [BSOB] - Bit-select into 'y_expected_prev' is out of bounds.
+# 
+# ** Warning: test_alu.vwf.vt(471): (vlog-2576) [BSOB] - Bit-select into 'y_prev' is out of bounds.
+# 
+# ** Warning: test_alu.vwf.vt(471): (vlog-2576) [BSOB] - Bit-select into 'y_expected_prev' is out of bounds.
+# 
+# ** Warning: test_alu.vwf.vt(472): (vlog-2576) [BSOB] - Bit-select into 'y_expected_prev' is out of bounds.
+# 
+# ** Warning: test_alu.vwf.vt(472): (vlog-2576) [BSOB] - Bit-select into 'last_y_exp' is out of bounds.
+# 
+# ** Warning: test_alu.vwf.vt(481): (vlog-2576) [BSOB] - Bit-select into 'last_y_exp' is out of bounds.
+# 
+# ** Warning: test_alu.vwf.vt(481): (vlog-2576) [BSOB] - Bit-select into 'y_expected_prev' is out of bounds.
+# 
+# -- Compiling module alu_sm_vlg_vec_tst
+# 
+# Top level modules:
+# 	alu_sm_vlg_vec_tst
+# vsim -L cycloneiv_ver -L altera_ver -L altera_mf_ver -L 220model_ver -L sgate -c -voptargs=\"+acc\" -t 1ps -novopt work.alu_sm_vlg_vec_tst 
+# Loading work.alu_sm_vlg_vec_tst
+# Loading work.alu_sm
+# Loading cycloneiv_ver.cycloneiv_io_obuf
+# Loading cycloneiv_ver.cycloneiv_io_ibuf
+# Loading cycloneiv_ver.cycloneiv_clkctrl
+# Loading cycloneiv_ver.cycloneiv_mux41
+# Loading cycloneiv_ver.cycloneiv_ena_reg
+# Loading cycloneiv_ver.cycloneiv_lcell_comb
+# Loading altera_ver.dffeas
+# Loading work.alu_sm_vlg_sample_tst
+# Loading work.alu_sm_vlg_check_tst
+# Loading altera_ver.PRIM_GDFF_LOW
+# Simulation passed !
+# ** Note: $finish    : test_alu.vwf.vt(612)
+#    Time: 1 us  Iteration: 0  Instance: /alu_sm_vlg_vec_tst/tb_out
